@@ -1,17 +1,28 @@
 import scrapy
 
+from datetime import datetime
+
+from util import slugify, get_publishers
+
 
 class JournalIndexSpider(scrapy.Spider):
     name = 'journal_indexes'
-    start_urls = [
-        'https://www.nature.com/siteindex/index.html',
-    ]
+
+    def start_requests(self):
+        for publisher in get_publishers(self.publishers):
+            yield scrapy.Request(publisher['index_url'], meta=publisher, dont_filter=True)
 
     def parse(self, response):
         self.logger.info('Index: %s' % response.url)
-        xpath = "/html/body[@class='article-page']/div[@id='content']/div[@id='journals-az']/div[@id='back-to-top']/div/div[@class='grid grid-8 mb20 mq640-grid-12 mq640-last']/div/ul[@class='ma0 cleared clean-list grid grid-10']/li/a[@class='block pt10 pb10 equalize-line-height']"
+        xpath = response.meta['journal_items_xpath']
         for item in response.xpath(xpath):
+            journal_name = item.xpath('text()').get()
             yield {
-                'journal_name': item.xpath('text()').get(),
-                'url': item.xpath('@href').get()
+                'ts': datetime.now().isoformat(),
+                'publisher_name': response.meta['name'],
+                'publisher_slug': response.meta['slug'],
+                'publisher_url': response.meta['url'],
+                'journal_name': journal_name,
+                'journal_slug': slugify(journal_name),
+                'journal_url': item.xpath('@href').get()
             }

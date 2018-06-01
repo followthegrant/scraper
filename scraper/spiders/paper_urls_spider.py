@@ -1,24 +1,39 @@
 import csv
 import scrapy
 
+from datetime import datetime
+
+from util import slugify, get_publishers
+
 
 class PaperUrlSpider(scrapy.Spider):
     name = 'paper_urls'
 
     def start_requests(self):
-        yield scrapy.Request('https://www.nature.com/aps/articles')
-        with open(self.file) as f:
+        publishers = {p['slug']: p for p in get_publishers(self.publishers)}
+        with open(self.journals) as f:
             reader = csv.DictReader(f)
-            for row in reader:
-                yield scrapy.Request('%s/articles' % row['url'])
+            for journal in reader:
+                publisher = publishers[journal['publisher_slug']]
+                url = journal['journal_url']
+                import ipdb; ipdb.set_trace()
+                if 'paper_index_url_eval' in publisher:
+                    get_url = eval(publisher['paper_index_url_eval'])
+                    url = get_url(journal['journal_url'])
+                yield scrapy.Request(url, meta=journal)
 
     def parse(self, response):
+        import ipdb; ipdb.set_trace()
         self.logger.info('Open: %s' % response.url)
-        xpath = "/html/body[@class='home-page']/div[@id='content']/div[@class='container cleared container-type-article-list']/div[@class='content mb30 mq1200-padded position-relative']/div[@class='background-white pb20']/div[@class='pa20 pt30 pb0 cleared hide-overflow']/div[@class=' grid grid-8 mq875-grid-12']/div/ul[@class='ma0 mb-negative-2 clean-list grid-auto-fill']/li[@class='border-gray-medium border-bottom-1 pb20']/article/div[@class='cleared']/h3[@class='mb10 extra-tight-line-height']/a"
-        next_page_xpath = "/html/body[@class='home-page']/div[@id='content']/div[@class='container cleared container-type-pagination']/div[@class='content mb20 mq1200-padded']/nav/ol[@class='clean-list pagination pagination-size-5 ma0 grid grid-12 clear']/li[@data-page='next']/a/@href"
+        xpath = response.meta['paper_items_xpath']
+        next_page_xpath = response.meta['paper_index_nextpage_xpath']
         for item in response.xpath(xpath):
             yield {
+                'ts': datetime.now().isoformat(),
+                'journal_name': response.meta['journal_name'],
+                'journal_slug': response.meta['journal_slug'],
                 'title': item.xpath('text()').get().strip().replace('\n', ' '),
+                'base_url': response.meta['download_slot'],
                 'url': item.xpath('@href').get()
             }
 
