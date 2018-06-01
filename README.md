@@ -31,7 +31,10 @@ Scrape based on the journal urls from step 1 all paper urls and save them to
 
 ### 3. download papers
 
-TODO
+Once you have a list of all the papers you want to download (created in step 1
+& 2), download them with this command:
+
+    scrapy crawl papers -a papers=./data/papers.csv -a save_to=./data/papers/ -o ./data/papers/index.csv
 
 ## installation
 
