@@ -15,21 +15,24 @@ class PaperUrlSpider(scrapy.Spider):
             reader = csv.DictReader(f)
             for journal in reader:
                 publisher = publishers[journal['publisher_slug']]
+                journal['publisher_meta'] = publisher
                 url = journal['journal_url']
-                import ipdb; ipdb.set_trace()
                 if 'paper_index_url_eval' in publisher:
                     get_url = eval(publisher['paper_index_url_eval'])
                     url = get_url(journal['journal_url'])
                 yield scrapy.Request(url, meta=journal)
 
     def parse(self, response):
-        import ipdb; ipdb.set_trace()
         self.logger.info('Open: %s' % response.url)
-        xpath = response.meta['paper_items_xpath']
-        next_page_xpath = response.meta['paper_index_nextpage_xpath']
+        xpath = response.meta['publisher_meta']['paper_items_xpath']
+        next_page_xpath = response.meta['publisher_meta']['paper_index_nextpage_xpath']
+        publisher_name = response.meta['publisher_meta']['name']
+        publisher_slug = slugify(publisher_name)
         for item in response.xpath(xpath):
             yield {
                 'ts': datetime.now().isoformat(),
+                'publisher_name': publisher_name,
+                'publisher_slug': publisher_slug,
                 'journal_name': response.meta['journal_name'],
                 'journal_slug': response.meta['journal_slug'],
                 'title': item.xpath('text()').get().strip().replace('\n', ' '),
@@ -39,4 +42,4 @@ class PaperUrlSpider(scrapy.Spider):
 
         next_page = response.xpath(next_page_xpath).get()
         if next_page is not None:
-            yield response.follow(next_page, dont_filter=True)
+            yield response.follow(next_page, dont_filter=True, meta=response.meta)
