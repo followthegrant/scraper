@@ -27,7 +27,7 @@ Scrape all publishers specified in the yaml file in the `publishers` argument
 Scrape based on the journal urls from step 1 all paper urls and save them to
 `./data/papers.csv`:
 
-    scrapy crawl paper_urls -a publishers=./data/publishers.yaml -a journals=./data/journals.csv -o ./data/papers.csv
+    scrapy crawl paper_urls -a publishers=./meta/publishers.yaml -a journals=./data/journals.csv -o ./data/papers.csv
 
 ### 3. download papers
 
