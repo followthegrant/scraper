@@ -5,3 +5,10 @@
   paper_index_url_eval: "lambda x: '%s/articles' % x"
   paper_items_xpath: //div[@id='content']/div[@class='container cleared container-type-article-list']/div[@class='content mb30 mq1200-padded position-relative']/div[@class='background-white pb20']/div[@class='pa20 pt30 pb0 cleared hide-overflow']/div[@class=' grid grid-8 mq875-grid-12']/div/ul[@class='ma0 mb-negative-2 clean-list grid-auto-fill']/li[@class='border-gray-medium border-bottom-1 pb20']/article/div[@class='cleared']/h3[@class='mb10 extra-tight-line-height']/a
   paper_index_nextpage_xpath: //li[@data-page='next']/a/@href
+
+- name: PLOS
+  url: https://www.plos.org
+  ignore_index: true
+  paper_index_url_eval: "lambda x: '%s/browse/?resultView=list' % x"
+  paper_items_xpath: //div[@id='subject-list-view']/ul[@id='search-results']/li/h2/a[@class='list-title']
+  paper_index_nextpage_xpath: //*[@id="nextPageLink"]/@href

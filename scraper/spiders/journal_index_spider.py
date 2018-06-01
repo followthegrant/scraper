@@ -10,7 +10,8 @@ class JournalIndexSpider(scrapy.Spider):
 
     def start_requests(self):
         for publisher in get_publishers(self.publishers):
-            yield scrapy.Request(publisher['index_url'], meta=publisher, dont_filter=True)
+            if not publisher.get('ignore_index'):
+                yield scrapy.Request(publisher['index_url'], meta=publisher, dont_filter=True)
 
     def parse(self, response):
         self.logger.info('Index: %s' % response.url)
