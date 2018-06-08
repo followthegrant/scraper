@@ -35,5 +35,5 @@ class PaperSpider(scrapy.Spider):
             'url': response.url,
             'status': response.status,
             'ts': datetime.now().isoformat(),
-            'path': os.path.realpath(fname)
+            'path': fname
         }
