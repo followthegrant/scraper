@@ -12,3 +12,10 @@
   paper_index_url_eval: "lambda x: '%s/browse/?resultView=list' % x"
   paper_items_xpath: //div[@id='subject-list-view']/ul[@id='search-results']/li/h2/a[@class='list-title']
   paper_index_nextpage_xpath: //*[@id="nextPageLink"]/@href
+
+- name: JAMA
+  url: https://jamanetwork.com
+  index_url: https://jamanetwork.com
+  journal_items_xpath: //footer[@class='footer']/div[@id='footer-network']/div[@class='footer-network-links-wrap']/div[@class='footer-network-sites']/div[@class='internal']/a
+  paper_index_url_eval: "lambda x: '%s/currentissue' % x"
+  paper_items_xpath: //div[@id='current-issue']/div[@class='issue-view-tab--contents']/div[@class='widget-ArticleListWithTocHeadings widget-instance-AMA_CurrentIssue_ArticleList']//div[@class='issue-group-articles']/div[@class='article']/h3[@class='article--title']/a
