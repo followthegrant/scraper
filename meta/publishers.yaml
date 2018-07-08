@@ -33,3 +33,13 @@
     item: //ul[@class='issue-toc item-list']/li[@class='issue-toc-section issue-toc-section-contents']/ul[@class='toc-section item-list']//ul[@class='toc-section item-list']/li/div[@class='toc-citation']/div/article[@class='highwire-cite highwire-cite-highwire-article highwire-citation-jnl-sci-toc clearfix media media--citation']/div[@class='media__body']/h3[@class='highwire-cite-title-wrapper media__headline']/a[@class='highwire-cite-linked-title']
     url: '@href'
     name: div/text()
+
+- name: The New England Journal of Medicine
+  slug: nejm
+  url: https://www.nejm.org
+  paper_index_url: https://www.nejm.org/medical-articles/original-article
+  paper_items_xpath:
+    item: //div[@id='searchResultContent']/div[@class='o-col--bordered']/ul[@class='o-results']/li[@class='m-result ']/a[@class='js__sliLearn m-result__link']
+    url: '@href'
+    name: span/strong/text()
+  paper_index_nextpage_xpath: //nav[@class='m-paginator sortTypes']/ul[@class='m-paginator__prev-next']/li[1]/a/@href

@@ -12,6 +12,7 @@ def get_publishers(fpath):
         publishers = yaml.load(f.read())
 
     for publisher in publishers:
-        publisher['slug'] = slugify(publisher['name'])
+        if 'slug' not in publisher:
+            publisher['slug'] = slugify(publisher['name'])
 
     return publishers
