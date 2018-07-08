@@ -17,10 +17,10 @@ NEWSPIDER_MODULE = 'scraper.spiders'
 FEED_FORMAT: 'csv'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'scraper (+http://www.yourdomain.com)'
+USER_AGENT = 'Mozilla/5.0'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 CONCURRENT_REQUESTS = 1
@@ -47,9 +47,10 @@ CONCURRENT_REQUESTS_PER_DOMAIN = 1
 
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
-#SPIDER_MIDDLEWARES = {
-#    'scraper.middlewares.ScraperSpiderMiddleware': 543,
-#}
+SPIDER_MIDDLEWARES = {
+    # 'scraper.middlewares.ScraperSpiderMiddleware': 543,
+    'scrapy.contrib.spidermiddleware.referer.RefererMiddleware': True,
+}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
