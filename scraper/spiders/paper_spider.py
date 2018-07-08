@@ -14,7 +14,7 @@ class PaperSpider(scrapy.Spider):
         with open(self.papers) as f:
             reader = csv.DictReader(f)
             for row in reader:
-                yield scrapy.Request(row['url'], meta=row)  # FIXME http scheme
+                yield scrapy.Request(row['url'], meta=row)
 
     def parse(self, response):
         self.logger.info('Open: %s' % response.url)
