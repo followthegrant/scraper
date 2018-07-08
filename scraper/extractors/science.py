@@ -10,8 +10,6 @@ import requests
 from scrapy.http import TextResponse
 from scrapy.utils.project import get_project_settings
 
-from util import get_absolute_url
-
 
 header = {
     'User-Agent': get_project_settings()['USER_AGENT']
@@ -33,10 +31,10 @@ header = {
 def _get_years_urls(response):
     # 2010s
     for url in response.xpath("//ul[@class='issue-browser years 2010 highwire-list active']/li/a/@href"):
-        yield get_absolute_url(response.url, url.get())
+        yield response.urljoin(url.get())
     # 2000s
     for url in response.xpath("//ul[@class='issue-browser years 2000 highwire-list']/li/a/@href"):
-        yield get_absolute_url(response.url, url.get())
+        yield response.urljoin(url.get())
 
 
 # def get_item(item, response, spider):

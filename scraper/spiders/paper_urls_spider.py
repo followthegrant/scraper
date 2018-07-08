@@ -5,7 +5,7 @@ import scrapy
 from datetime import datetime
 
 from scraper import extractors  # FIXME python import foo
-from util import slugify, get_publishers, get_absolute_url
+from util import get_publishers
 
 
 class PaperUrlSpider(scrapy.Spider):
@@ -46,7 +46,7 @@ class PaperUrlSpider(scrapy.Spider):
         next_page_xpath = response.meta['publisher_meta'].get('paper_index_nextpage_xpath')
         for item in response.xpath(xpath):
             title = item.xpath(name_xpath).get()
-            url = get_absolute_url(response.url, item.xpath(url_xpath).get())
+            url = response.urljoin(item.xpath(url_xpath).get())
             if title and url:
                 yield {
                     'ts': datetime.now().isoformat(),

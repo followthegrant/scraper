@@ -1,5 +1,4 @@
 import yaml
-from urllib.parse import urljoin
 
 from slugify import slugify as _slugify
 
@@ -16,9 +15,3 @@ def get_publishers(fpath):
         publisher['slug'] = slugify(publisher['name'])
 
     return publishers
-
-
-def get_absolute_url(base, url):
-    if not url.startswith('http'):
-        return urljoin(base, url)
-    return url
