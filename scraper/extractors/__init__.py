@@ -1,1 +1,1 @@
-from . import science
+from . import science, lancet

@@ -15,7 +15,7 @@ class PaperUrlSpider(scrapy.Spider):
         publishers = {p['slug']: p for p in get_publishers(self.publishers)}
         if hasattr(self, 'journals'):
             with open(self.journals) as f:
-                journals = csv.DictReader(f)
+                journals = list(csv.DictReader(f))
         else:
             journals = [{
                 'publisher_slug': p['slug'],
