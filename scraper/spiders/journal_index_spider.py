@@ -2,7 +2,7 @@ import scrapy
 
 from datetime import datetime
 
-from util import slugify, get_publishers
+from util import slugify, get_publishers, get_absolute_url
 
 
 class JournalIndexSpider(scrapy.Spider):
@@ -18,6 +18,7 @@ class JournalIndexSpider(scrapy.Spider):
         xpath = response.meta['journal_items_xpath']
         for item in response.xpath(xpath):
             journal_name = item.xpath('text()').get()
+            journal_url = get_absolute_url(response.url, item.xpath('@href').get())
             yield {
                 'ts': datetime.now().isoformat(),
                 'publisher_name': response.meta['name'],
@@ -25,5 +26,5 @@ class JournalIndexSpider(scrapy.Spider):
                 'publisher_url': response.meta['url'],
                 'journal_name': journal_name,
                 'journal_slug': slugify(journal_name),
-                'journal_url': item.xpath('@href').get()
+                'journal_url': journal_url
             }
