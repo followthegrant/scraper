@@ -49,7 +49,7 @@ CONCURRENT_REQUESTS_PER_DOMAIN = 1
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 SPIDER_MIDDLEWARES = {
     # 'scraper.middlewares.ScraperSpiderMiddleware': 543,
-    'scrapy.contrib.spidermiddleware.referer.RefererMiddleware': True,
+    'scrapy.spidermiddlewares.referer.RefererMiddleware': True,
 }
 
 # Enable or disable downloader middlewares

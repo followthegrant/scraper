@@ -1,8 +1,10 @@
+# import importlib
 import csv
 import scrapy
 
 from datetime import datetime
 
+from scraper import extractors  # FIXME python import foo
 from util import slugify, get_publishers, get_absolute_url
 
 
@@ -13,7 +15,7 @@ class PaperUrlSpider(scrapy.Spider):
         publishers = {p['slug']: p for p in get_publishers(self.publishers)}
         with open(self.journals) as f:
             reader = csv.DictReader(f)
-            for journal in reader:
+            for journal in list(reader)[:1]:
                 journal_publisher = journal['publisher_slug']
                 if (self.publisher and journal_publisher == self.publisher) or not self.publisher:
                     publisher = publishers[journal_publisher]
@@ -22,25 +24,39 @@ class PaperUrlSpider(scrapy.Spider):
                     if 'paper_index_url_eval' in publisher:
                         get_url = eval(publisher['paper_index_url_eval'])
                         url = get_url(journal['journal_url'])
-                    yield scrapy.Request(url, meta=journal)
+                    url_extractor = publisher.get('paper_index_urls_extractor')
+                    if url_extractor:
+                        # FIXME python import foo
+                        # extractor = importlib.import_module('scraper.extractors', package=url_extractor)
+                        extractor = getattr(extractors, url_extractor)
+                        for url in extractor.extract(url):
+                            yield scrapy.Request(url, meta=journal)
+                    else:
+                        yield scrapy.Request(url, meta=journal)
 
     def parse(self, response):
         self.logger.info('Open: %s' % response.url)
         xpath = response.meta['publisher_meta']['paper_items_xpath']
+        name_xpath = 'text()'
+        url_xpath = '@href'
+        if isinstance(xpath, dict):
+            name_xpath = xpath['name']
+            url_xpath = xpath['url']
+            xpath = xpath['item']
         next_page_xpath = response.meta['publisher_meta'].get('paper_index_nextpage_xpath')
-        publisher_name = response.meta['publisher_meta']['name']
-        publisher_slug = slugify(publisher_name)
         for item in response.xpath(xpath):
-            yield {
-                'ts': datetime.now().isoformat(),
-                'publisher_name': publisher_name,
-                'publisher_slug': publisher_slug,
-                'journal_name': response.meta['journal_name'],
-                'journal_slug': response.meta['journal_slug'],
-                'title': item.xpath('text()').get().strip().replace('\n', ' '),
-                'base_url': response.meta['download_slot'],
-                'url': get_absolute_url(response.url, item.xpath('@href').get())
-            }
+            title = item.xpath(name_xpath).get()
+            url = get_absolute_url(response.url, item.xpath(url_xpath).get())
+            if title and url:
+                yield {
+                    'ts': datetime.now().isoformat(),
+                    'publisher_name': response.meta['publisher_name'],
+                    'publisher_slug': response.meta['publisher_slug'],
+                    'journal_name': response.meta['journal_name'],
+                    'journal_slug': response.meta['journal_slug'],
+                    'title': title.strip().replace('\n', ' '),
+                    'url': url
+                }
 
         if next_page_xpath:
             next_page = response.xpath(next_page_xpath).get()
