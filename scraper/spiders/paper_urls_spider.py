@@ -5,14 +5,14 @@ import scrapy
 from datetime import datetime
 
 from scraper import extractors  # FIXME python import foo
-from util import get_publishers
+from util import get_publisher
 
 
 class PaperUrlSpider(scrapy.Spider):
     name = 'paper_urls'
 
     def start_requests(self):
-        publishers = {p['slug']: p for p in get_publishers(self.publishers)}
+        publisher = get_publisher(self.publisher)
         if hasattr(self, 'journals'):
             with open(self.journals) as f:
                 journals = list(csv.DictReader(f))
@@ -23,25 +23,22 @@ class PaperUrlSpider(scrapy.Spider):
                 'journal_name': p['name'],
                 'journal_slug': p['slug'],
                 'journal_url': p['paper_index_url']
-            } for p in publishers.values() if p.get('paper_index_url')]
+            } for p in [publisher] if p.get('paper_index_url')]
 
         for journal in journals:
-            journal_publisher = journal['publisher_slug']
-            if (hasattr(self, 'publisher') and journal_publisher == self.publisher) or not hasattr(self, 'publisher'):
-                publisher = publishers[journal_publisher]
-                journal['publisher_meta'] = publisher
-                url = journal['journal_url']
-                if 'paper_index_url_eval' in publisher:
-                    get_url = eval(publisher['paper_index_url_eval'])
-                    url = get_url(journal['journal_url'])
-                url_extractor = publisher.get('paper_index_urls_extractor')
-                if url_extractor:
-                    # FIXME python import foo
-                    # extractor = importlib.import_module('scraper.extractors', package=url_extractor)
-                    extractor = getattr(extractors, url_extractor)
-                    for url in extractor.extract(url):
-                        yield scrapy.Request(url, meta=journal, dont_filter=True)
-                else:
+            journal['publisher_meta'] = publisher
+            url = journal['journal_url']
+            if 'paper_index_url_eval' in publisher:
+                get_url = eval(publisher['paper_index_url_eval'])
+                url = get_url(journal['journal_url'])
+            url_extractor = publisher.get('paper_index_urls_extractor')
+            if url_extractor:
+                # FIXME python import foo
+                # extractor = importlib.import_module('scraper.extractors', package=url_extractor)
+                extractor = getattr(extractors, url_extractor)
+                for url in extractor.extract(url):
+                    yield scrapy.Request(url, meta=journal, dont_filter=True)
+            else:
                     yield scrapy.Request(url, meta=journal, dont_filter=True)
 
     def parse(self, response):

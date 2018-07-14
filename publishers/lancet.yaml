@@ -1,0 +1,10 @@
+name: The Lancet
+url: https://www.thelancet.com/
+index_url: https://www.thelancet.com/
+journal_items_xpath: //footer[@class='page-footer']/div/div/div[@class='wrapped ']/div/div/div[@class='width_1_2'][1]/div[@class='pb-autoheight']/section/div[@class='wrapped ']/div[@class='widget-body body body-none  body-compact-all']/ul/li/a
+paper_index_url_eval: "lambda x: x.replace('issue/current', 'issues')"
+paper_index_urls_extractor: lancet
+paper_items_xpath:
+  item: //ul[@class='articleCitations']/div[@class='articleCitations']/div[@class='articleCitation']/li/div[@class='detail']/div[@class='article-details']
+  name: div[@class='articleTitle']/h3/text()
+  url: div[@class='formats']/a[1]/@href

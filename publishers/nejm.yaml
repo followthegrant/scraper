@@ -1,0 +1,9 @@
+name: The New England Journal of Medicine
+slug: nejm
+url: https://www.nejm.org
+paper_index_url: https://www.nejm.org/medical-articles/original-article
+paper_items_xpath:
+  item: //div[@id='searchResultContent']/div[@class='o-col--bordered']/ul[@class='o-results']/li[@class='m-result ']/a[@class='js__sliLearn m-result__link']
+  url: '@href'
+  name: span/strong/text()
+paper_index_nextpage_xpath: //nav[@class='m-paginator sortTypes']/ul[@class='m-paginator__prev-next']/li[1]/a/@href

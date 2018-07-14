@@ -1,0 +1,6 @@
+name: PLOS
+url: https://www.plos.org
+ignore_index: true
+paper_index_url_eval: "lambda x: '%s/browse/?resultView=list' % x"
+paper_items_xpath: //div[@id='subject-list-view']/ul[@id='search-results']/li/h2/a[@class='list-title']
+paper_index_nextpage_xpath: //*[@id="nextPageLink"]/@href

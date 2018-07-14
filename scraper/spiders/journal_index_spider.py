@@ -2,18 +2,16 @@ import scrapy
 
 from datetime import datetime
 
-from util import slugify, get_publishers
+from util import slugify, get_publisher
 
 
 class JournalIndexSpider(scrapy.Spider):
     name = 'journal_indexes'
 
     def start_requests(self):
-        for publisher in get_publishers(self.publishers):
-            if (hasattr(self, 'publisher') and publisher['slug'] == self.publisher)\
-               or not hasattr(self, 'publisher')\
-               and not publisher.get('ignore_index'):
-                yield scrapy.Request(publisher['index_url'], meta=publisher, dont_filter=True)
+        publisher = get_publisher(self.publisher)
+        if not publisher.get('ignore_index'):
+            yield scrapy.Request(publisher['index_url'], meta=publisher, dont_filter=True)
 
     def parse(self, response):
         self.logger.info('Index: %s' % response.url)

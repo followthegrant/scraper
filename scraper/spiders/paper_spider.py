@@ -22,9 +22,8 @@ class PaperSpider(scrapy.Spider):
         if response.status == 200:
             fname = os.path.join(
                 self.save_to,
-                response.meta['publisher_slug'],
                 response.meta['journal_slug'],
-                '%s--%s.html' % (slugify(response.meta['title'][:50]), str(uuid4())[:8])
+                '%s--%s.html' % (slugify(response.meta['title'][:50]), str(uuid4()))
             )
             os.makedirs(os.path.split(fname)[0], exist_ok=True)
             with open(fname, 'w') as f:

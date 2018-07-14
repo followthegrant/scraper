@@ -1,0 +1,13 @@
+name: Science
+url: https://www.sciencemag.org
+index_url: https://www.sciencemag.org/journals
+journal_items_xpath:
+  item: //section[@class='journal-landing']/div[@class='journal-landing__meta']/div[@class='media media--var']/div[@class='media__body']
+  name: h2/text()
+  url: ul[@class='priority-2']/li[1]/a/@href
+paper_index_url_eval: "lambda x: '%s/content/by/year/' % x"
+paper_index_urls_extractor: science
+paper_items_xpath:
+  item: //ul[@class='issue-toc item-list']/li[@class='issue-toc-section issue-toc-section-contents']/ul[@class='toc-section item-list']//ul[@class='toc-section item-list']/li/div[@class='toc-citation']/div/article[@class='highwire-cite highwire-cite-highwire-article highwire-citation-jnl-sci-toc clearfix media media--citation']/div[@class='media__body']/h3[@class='highwire-cite-title-wrapper media__headline']/a[@class='highwire-cite-linked-title']
+  url: '@href'
+  name: div/text()
