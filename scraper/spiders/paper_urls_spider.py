@@ -5,7 +5,7 @@ import scrapy
 from datetime import datetime
 
 from scraper import extractors  # FIXME python import foo
-from util import get_publisher
+from util import get_publisher, cleanup_breaks
 
 
 class PaperUrlSpider(scrapy.Spider):
@@ -61,7 +61,7 @@ class PaperUrlSpider(scrapy.Spider):
                     'publisher_slug': response.meta['publisher_slug'],
                     'journal_name': response.meta['journal_name'],
                     'journal_slug': response.meta['journal_slug'],
-                    'title': title.strip().replace('\n', ' '),
+                    'title': cleanup_breaks(title),
                     'url': url
                 }
 

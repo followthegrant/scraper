@@ -2,7 +2,7 @@ import scrapy
 
 from datetime import datetime
 
-from util import slugify, get_publisher
+from util import slugify, get_publisher, cleanup_breaks
 
 
 class JournalIndexSpider(scrapy.Spider):
@@ -23,7 +23,7 @@ class JournalIndexSpider(scrapy.Spider):
             url_xpath = xpath['url']
             xpath = xpath['item']
         for item in response.xpath(xpath):
-            journal_name = item.xpath(name_xpath).get()
+            journal_name = cleanup_breaks(item.xpath(name_xpath).get())
             journal_url = response.urljoin(item.xpath(url_xpath).get())
             if journal_name and journal_url:
                 yield {

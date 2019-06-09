@@ -1,0 +1,18 @@
+# The Lancet
+type:
+  key: "og:type"
+  values:
+    - Article
+meta:
+  title: citation_title
+  publisher: citation_publisher
+  journal: citation_journal_title
+  date: citation_date
+  lang: citation_language
+  issn: citation_issn
+  doi: citation_doi
+  url: citation_fulltext_html_url
+authors:
+  name: citation_author
+  institution: citation_author_institution
+disclosure_parser: 'parsers.lancet'

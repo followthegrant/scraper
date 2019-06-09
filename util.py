@@ -13,3 +13,7 @@ def get_publisher(fpath):
     if 'slug' not in publisher:
         publisher['slug'] = slugify(publisher['name'])
     return publisher
+
+
+def cleanup_breaks(value):
+    return ' '.join(value.split()).strip()

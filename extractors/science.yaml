@@ -1,0 +1,19 @@
+# science
+type:
+  key: citation_article_type
+  values:
+    - Research Article
+meta:
+  title: DC.Title
+  publisher: DC.Publisher
+  journal: citation_journal_title
+  date: DC.Date
+  lang: DC.Language
+  description: DC.Description
+  issn: citation_issn
+  doi: citation_doi
+  url: citation_full_html_url
+authors:
+  name: citation_author
+  institution: citation_author_institution
+disclosure_parser: 'parsers.science'

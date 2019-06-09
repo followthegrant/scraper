@@ -1,0 +1,19 @@
+# nejm.org
+type:
+  key: dc.Type
+  values:
+    - research-article
+meta:
+  title: dc.Title
+  publisher: dc.Publisher
+  journal: citation_journal_title
+  date: dc.Date
+  lang: dc.Language
+  description: dc.Description
+  doi: evt-doiPage
+  url: "og:url"
+authors:
+  name: dc.Creator
+disclosure_parser: 'parsers.nejm'
+defaults:
+  journal: New England Journal of Medicine

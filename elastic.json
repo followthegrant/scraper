@@ -1,0 +1,77 @@
+{
+  "index_patterns": [
+    "ftg-*"
+  ],
+  "mappings": {
+    "doc": {
+      "properties": {
+        "scope": {
+          "type": "keyword"
+        },
+        "author.name": {
+          "type": "text",
+          "fields": {
+            "term": {
+              "type": "keyword"
+            }
+          }
+        },
+        "author.institutions": {
+          "type": "text",
+          "fields": {
+            "term": {
+              "type": "keyword"
+            }
+          }
+        },
+        "paper.tags": {
+          "type": "text",
+          "fields": {
+            "term": {
+              "type": "keyword"
+            }
+          }
+        },
+        "paper.journal": {
+          "type": "text",
+          "fields": {
+            "term": {
+              "type": "keyword"
+            }
+          }
+        },
+        "paper.publisher": {
+          "type": "text",
+          "fields": {
+            "term": {
+              "type": "keyword"
+            }
+          }
+        },
+        "paper.lang": {
+          "type": "keyword"
+        },
+        "paper.authors.name": {
+          "type": "text",
+          "fields": {
+            "term": {
+              "type": "keyword"
+            }
+          }
+        },
+        "paper.authors.institutions": {
+          "type": "text",
+          "fields": {
+            "term": {
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    }
+  },
+  "settings": {
+    "index.number_of_shards": 5,
+    "index.number_of_replicas": 0
+  }
+}

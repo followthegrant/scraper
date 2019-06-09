@@ -1,0 +1,22 @@
+# nature.com
+type:
+  key: dc.type
+  values:
+    - OriginalPaper
+    - ReviewPaper
+    - Research
+meta:
+  title: dc.title
+  publisher: dc.publisher
+  journal: citation_journal_title
+  date: dc.date
+  lang: dc.language
+  abstract: dc.description
+  issn: prism.issn
+  doi: DOI
+  url: citation_fulltext_html_url
+tags: dc.subject
+authors:
+  name: citation_author
+  institution: citation_author_institution
+disclosure_parser: 'parsers.nature'
